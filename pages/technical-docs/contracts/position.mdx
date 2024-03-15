@@ -3,3 +3,379 @@
 ## Description
 
 The `Position` contract represents one position of an individual user. A single user can own multiple `Position` contracts, each representing a different combination of collateral, debt, and base tokens.
+
+`Position` contracts are deployed by the [`PositionFactory`](position-factory.mdx) contract via the [`createPosition`](position-factory.mdx#createposition) function.
+
+-
+
+## Write Functions
+
+### add
+
+Adds to the position.
+
+🚨 This method requires the caller to approve the `Position` contract to spend `_cAmt` of the caller's [C_TOKEN](position.mdx#c_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function. 🚨
+
+```solidity
+function add(
+    uint256 _cAmt,
+    uint256 _ltv,
+    uint256 _swapAmtOutMin,
+    uint24 _poolFee,
+    address _client
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name   | Type      | Description                                                                                                                                              |
+| :--------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_cAmt`          | `uint256` | The amount of [C_TOKEN](position.mdx#c_token) to be supplied for this transaction-specific loan. <br/><br/> Units: [C_DECIMALS](position.mdx#c_decimals) |
+| `_ltv`           | `uint256` | The desired loan-to-value ratio for this transaction-specific loan. <br/><br/> Ex: 75 is 75%                                                             |
+| `_swapAmtOutMin` | `uint256` | The minimum amount of output [B_TOKEN](position.mdx#b_token) from the swap, in order for the transaction to go through.                                  |
+| `_poolFee`       | `uint256` | [The Uniswap pool fee tier.](https://docs.uniswap.org/concepts/protocol/fees#pool-fees-tiers) <br/><br/> Ex: `3000` for 0.30%                            |
+| `_client`        | `address` | The address of the client operator. <br/><br/> ❗ Use `address(0)` if not using a client.                                                                |
+
+### addWithPermit
+
+Adds to the position using an [ERC-2612](https://eips.ethereum.org/EIPS/eip-2612) permit, obviating the need for a separate approve transaction.
+
+```solidity
+function addWithPermit(
+    uint256 _cAmt,
+    uint256 _ltv,
+    uint256 _swapAmtOutMin,
+    uint24 _poolFee,
+    address _client,
+    uint256 _deadline,
+    uint8 _v,
+    bytes32 _r,
+    bytes32 _s
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name   | Type      | Description                                                                                                                                              |
+| :--------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_cAmt`          | `uint256` | The amount of [C_TOKEN](position.mdx#c_token) to be supplied for this transaction-specific loan. <br/><br/> Units: [C_DECIMALS](position.mdx#c_decimals) |
+| `_ltv`           | `uint256` | The desired loan-to-value ratio for this transaction-specific loan. <br/><br/> Ex: 75 is 75%                                                             |
+| `_swapAmtOutMin` | `uint256` | The minimum amount of output [B_TOKEN](position.mdx#b_token) from the swap, in order for the transaction to go through.                                  |
+| `_poolFee`       | `uint256` | [The Uniswap pool fee tier.](https://docs.uniswap.org/concepts/protocol/fees#pool-fees-tiers) <br/><br/> Ex: `3000` for 0.30%                            |
+| `_client`        | `address` | The address of the client operator. <br/><br/> ❗ Use `address(0)` if not using a client.                                                                |
+| `_deadline`      | `uint256` | The expiration timestamp of the permit. <br/><br/> Ex: `block.timestamp + 5 minutes`                                                                     |
+| `_v`             | `uint8`   | The `v` parameter of ERC-712 signature for the permit.                                                                                                   |
+| `_r`             | `bytes32` | The `r` parameter of ERC-712 signature for the permit.                                                                                                   |
+| `_s`             | `bytes32` | The `s` parameter of ERC-712 signature for the permit.                                                                                                   |
+
+### addLeverage
+
+Adds leverage to the position using the [B_TOKEN](position.mdx#b_token) balance on Aave.
+
+```solidity
+function addLeverage(
+    uint256 _dAmt,
+    uint256 _swapAmtOutMin,
+    uint24 _poolFee,
+    address _client
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name   | Type      | Description                                                                                                                   |
+| :--------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| `_dAmt`          | `uint256` |                                                                                                                               |
+| `_swapAmtOutMin` | `uint256` | The minimum amount of output [B_TOKEN](position.mdx#b_token) from the swap, in order for the transaction to go through.       |
+| `_poolFee`       | `uint24`  | [The Uniswap pool fee tier.](https://docs.uniswap.org/concepts/protocol/fees#pool-fees-tiers) <br/><br/> Ex: `3000` for 0.30% |
+| `_client`        | `address` | The address of the client operator. <br/><br/> ❗ Use `address(0)` if not using a client.                                     |
+
+### reduce
+
+Reduces a position based on the amount of [B_TOKEN](position.mdx#b_token) and [C_TOKEN](position.mdx#c_token) withdrawn.
+
+🚨 The [B_TOKEN](position.mdx#b_token) is withdrawn from Aave and swapped for the [D_TOKEN](position.mdx#d_token) to repay the loan. Only profitable positions are able fully reduce the position and withdraw all funds. 🚨
+
+```solidity
+function reduce(
+    uint24 _poolFee,
+    bool _exactOutput,
+    uint256 _swapAmtOutMin,
+    uint256 _withdrawCAmt,
+    uint256 _withdrawBAmt
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name   | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| :--------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_poolFee`       | `uint24`  | [The Uniswap pool fee tier.](https://docs.uniswap.org/concepts/protocol/fees#pool-fees-tiers) <br/><br/> Ex: `3000` for 0.30%                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `_exactOutput`   | `bool`    | Whether to swap via [exact output](https://docs.uniswap.org/contracts/v3/reference/periphery/interfaces/ISwapRouter#exactoutputsingle) or [exact input](https://docs.uniswap.org/contracts/v3/reference/periphery/interfaces/ISwapRouter#exactinputsingle) on Uniswap. <br/><br/> If the position was profitable, use exact output. Otherwise, use exact input. Profitability can be determined via [event](https://github.com/chainrule-labs/shaave-contracts/blob/main/src/Position.sol#L22) analysis. <br/><br/> Use `true` for exact output and `false` for exact input. |
+| `_swapAmtOutMin` | `uint256` | The minimum amount of output [D_TOKEN](position.mdx#d_token) from the swap, in order for the transaction to go through. <br/><br/> ❗ Only used if `_exactOutput = false`. Use `0` if `_exactOutput = true`.                                                                                                                                                                                                                                                                                                                                                                 |
+| `_withdrawCAmt`  | `uint256` | The amount of [C_TOKEN](position.mdx#c_token) to withdraw from Aave after repaying some (or all) of the debt. <br/><br/> ❗ **INSTRUCTIONS ON HOW TO CALCULATE GO HERE.** <br/><br/> Units: [C_DECIMALS](position.mdx#c_decimals)                                                                                                                                                                                                                                                                                                                                            |
+| `_withdrawBAmt`  | `uint256` | The amount of [B_TOKEN](position.mdx#b_token) to withdraw from Aave and swap for the [D_TOKEN](position.mdx#d_token) to repay the loan. <br/><br/> ❗ **INSTRUCTIONS ON HOW TO CALCULATE GO HERE.** <br/><br/> Units: [B_DECIMALS](position.mdx#b_decimals)                                                                                                                                                                                                                                                                                                                  |
+
+### addCollateral
+
+Increases the collateral amount backing the `Position` contract's loan.
+
+🚨 This method requires the caller to approve the `Position` contract to spend `_cAmt` of the caller's [C_TOKEN](position.mdx#c_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function. 🚨
+
+```solidity
+function addCollateral(
+    uint256 _cAmt
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                      |
+| :------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_cAmt`        | `uint256` | The amount of [C_TOKEN](position.mdx#c_token) to be supplied to increase the `Position` contract's loan. <br/><br/> Units: [C_DECIMALS](position.mdx#c_decimals) |
+
+### addCollateralWithPermit
+
+Increases the collateral amount backing the `Position` contract's loan using an [ERC-2612](https://eips.ethereum.org/EIPS/eip-2612) permit, obviating the need for a separate approve transaction.
+
+```solidity
+function addCollateralWithPermit(
+    uint256 _cAmt
+    uint256 _deadline,
+    uint8 _v,
+    bytes32 _r,
+    bytes32 _s
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                      |
+| :------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_cAmt`        | `uint256` | The amount of [C_TOKEN](position.mdx#c_token) to be supplied to increase the `Position` contract's loan. <br/><br/> Units: [C_DECIMALS](position.mdx#c_decimals) |
+| `_deadline`    | `uint256` | The expiration timestamp of the permit. <br/><br/> Ex: `block.timestamp + 5 minutes`                                                                             |
+| `_v`           | `uint8`   | The `v` parameter of ERC-712 signature for the permit.                                                                                                           |
+| `_r`           | `bytes32` | The `r` parameter of ERC-712 signature for the permit.                                                                                                           |
+| `_s`           | `bytes32` | The `s` parameter of ERC-712 signature for the permit.                                                                                                           |
+
+### withdraw
+
+Withdraws the specified amount of collateral from Aave and transfers it to the specified recipient.
+
+🚨 INSTRUCTIONS ON HOW TO CALCULATE MAX C AMOUNT AND MAX B AMOUNT TO WITHDRAW HERE 🚨
+
+```solidity
+function withdraw(
+    address _token,
+    uint256 _amt,
+    address _recipient,
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                                                                                                                                                 |
+| :------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `_token`       | `address` | The address of the token to withdraw. This can be the `Position` contract's [C_TOKEN](position.mdx#c_token) or [B_TOKEN](position.mdx#b_token).                                                                                                                                             |
+| `_amt`         | `uint256` | The amount to withdraw. <br/><br/> If withdrawing the `Position` contract's [C_TOKEN](position.mdx#c_token), and the debt is fully paid off, use the maximum integer, `type(uint256).max`. <br/><br/> Units: [C_DECIMALS](position.mdx#c_decimals) or [B_DECIMALS](position.mdx#b_decimals) |
+| `_recipient`   | `address` | The address of the account that will receive the withdrawn collateral.                                                                                                                                                                                                                      |
+
+### repay
+
+Repays outstanding debt to Aave.
+
+One use-case for this function is when a position was not profitable and the amount of [B_TOKEN](position.mdx#b_token) was not enough to repay the loan. If the `Position` owner wants to retrieve any remaining collateral, more [D_TOKEN](position.mdx#d_token) must be acquired elsewhere to pay off the remaining debt via this function.
+
+🚨 This method requires the caller to approve the `Position` contract to spend `_dAmt` of the caller's [D_TOKEN](position.mdx#d_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function. 🚨
+
+```solidity
+function repay(
+    uint256 _dAmt,
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| :------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_dAmt`        | `uint256` | The amount of [D_TOKEN](position.mdx#d_token) to repay the loan on Aave. <br/><br/> The `debtOwed` is the Position contract's [variable debt token](https://docs.aave.com/developers/v/2.0/the-core-protocol/debt-tokens) balance. <br/><br/> To get the variable debt token address, call `getReserveData(D_TOKEN)` on [Aave's Pool contract](https://docs.aave.com/developers/core-contracts/pool#getreservedata), where `D_TOKEN` is the token to pay Aave back with. <br/><br/> To pay off the entire debt, add a small buffer to `debtOwed`. <br/><br/> Ex: `_dAmt = debtOwed + 5` <br/><br/> Units: [D_DECIMALS](position.mdx#d_decimals) |
+
+### repayAndWithdrawWithPermit
+
+Repays outstanding debt to Aave using an [ERC-2612](https://eips.ethereum.org/EIPS/eip-2612) permit, obviating the need for a separate approve transaction.
+
+One use-case for this function is when a position was not profitable and the amount of [B_TOKEN](position.mdx#b_token) was not enough to repay the loan. If the `Position` owner wants to retrieve any remaining collateral, more [D_TOKEN](position.mdx#d_token) must be acquired elsewhere to pay off the remaining debt via this function.
+
+```solidity
+function repayWithPermit(
+    uint256 _dAmt,
+    uint256 _deadline,
+    uint8 _v,
+    bytes32 _r,
+    bytes32 _s
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| :------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_dAmt`        | `uint256` | The amount of [D_TOKEN](position.mdx#d_token) to repay the loan on Aave. <br/><br/> The `debtOwed` is the Position contract's [variable debt token](https://docs.aave.com/developers/v/2.0/the-core-protocol/debt-tokens) balance. <br/><br/> To get the variable debt token address, call `getReserveData(D_TOKEN)` on [Aave's Pool contract](https://docs.aave.com/developers/core-contracts/pool#getreservedata), where `D_TOKEN` is the token to pay Aave back with. <br/><br/> To pay off the entire debt, add a small buffer to `debtOwed`. <br/><br/> Ex: `_dAmt = debtOwed + 5` <br/><br/> Units: [D_DECIMALS](position.mdx#d_decimals) |
+| `_deadline`    | `uint256` | The expiration timestamp of the permit. <br/><br/> Ex: `block.timestamp + 5 minutes`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `_v`           | `uint8`   | The `v` parameter of ERC-712 signature for the permit.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `_r`           | `bytes32` | The `r` parameter of ERC-712 signature for the permit.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `_s`           | `bytes32` | The `s` parameter of ERC-712 signature for the permit.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+
+### extractNative
+
+Allows the `Position` contract owner to withdraw all of the contract's native token balance.
+
+```solidity
+function extractNative() external payable;
+```
+
+### extractERC20
+
+Allows the `Position` contract owner to withdraw all of a specified ERC-20 token balance from the contract.
+
+```solidity
+extractERC20(address _token) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                               |
+| :------------- | :-------- | :------------------------------------------------------------------------ |
+| `_token`       | `address` | The address of the ERC-20 token to withdraw from the `Position` contract. |
+
+## Read Functions
+
+### PROTOCOL_FEE_RATE
+
+Returns the maximum percentage that the protocol charges each revenue-generating transaction. This is a constant 0.3%.
+
+The 0.3% fee is charged only when the [`add`](position.mdx#add) and [`addLeverage`](position.mdx#addleverage) functions are called on the `Position` contract. When [`add`](position.mdx#add) is called, 0.3% of the supplied [C_TOKEN](position.mdx#c_token) is taken as a fee. When [`addLeverage`](position.mdx#addleverage) is called, 0.3% of the supplied [D_TOKEN](position.mdx#d_token) is taken as a fee.
+
+🚨 Depending on the specific arrangement, a portion of this fee may be allocated to client operators, their users, or both. This variability is the reason it is referred to as the "maximum" fee. 🚨
+
+```solidity
+function PROTOCOL_FEE_RATE() external view returns (uint256);
+```
+
+#### Output Parameters
+
+| Parameter Name      | Type      | Description                                                                                                     |
+| :------------------ | :-------- | :-------------------------------------------------------------------------------------------------------------- |
+| `PROTOCOL_FEE_RATE` | `uint256` | The maximum percentage fee charged by the protocol each revenue-generating transaction. <br/><br/> Ex: 3 = 0.3% |
+
+### FEE_COLLECTOR
+
+Returns the address of the [`FeeCollector`](feecollector.mdx) contract, which is responsible for collecting and allocating protocol fees.
+
+```solidity
+function FEE_COLLECTOR() external view returns (address);
+```
+
+#### Output Parameters
+
+| Parameter Name  | Type      | Description                                                                                                                                                                                                                                                                                                  |
+| :-------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FEE_COLLECTOR` | `address` | The address of the FeeCollector contract. <br/><br/> When `add` and `addLeverage` functions are called on the `Position` contract, the `FeeCollector` contract collects a 0.3% fee. Depending on the specific arrangement, a portion of this fee may be allocated to client operators, their users, or both. |
+
+### OWNER
+
+Returns the owner of the `Position` contract.
+
+```solidity
+function OWNER() external view returns (address);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                      |
+| :------------- | :-------- | :------------------------------------------------------------------------------- |
+| `owner`        | `address` | The address of the account that has owner privileges on the `Position` contract. |
+
+### C_TOKEN
+
+Returns the address of the `Position` contract's collateral token.
+
+```solidity
+function C_TOKEN() external view returns (address);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                       |
+| :------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `C_TOKEN`      | `address` | The address of the `Position` contract's collateral token. <br/><br/> When adding to a position, the Position contract supplies this token as collateral to Aave. |
+
+### D_TOKEN
+
+Returns the address of the `Position` contract's debt token.
+
+```solidity
+function D_TOKEN() external view returns (address);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                      |
+| :------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `D_TOKEN`      | `address` | The address of the `Position` contract's debt token. <br/><br/> When adding to a position, the `Position` contract borrows this token from Aave. |
+
+### B_TOKEN
+
+Returns the address of the `Position` contract's base token.
+
+```solidity
+function B_TOKEN() external view returns (address);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                                           |
+| :------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `B_TOKEN`      | `address` | The address of the `Position` contract's base token. <br/><br/> When adding to a position, the Position contract swaps its [D_TOKEN](position.mdx#d_token) for this token on Uniswap. |
+
+### C_DECIMALS
+
+Returns the number of decimals for the `Position` contract's collateral token.
+
+```solidity
+function C_DECIMALS() external view returns (uint8);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type  | Description                                                                             |
+| :------------- | :---- | :-------------------------------------------------------------------------------------- |
+| `C_DECIMALS`   | uint8 | The ERC-20 token decimals of the `Position` contract's [C_TOKEN](position.mdx#c_token). |
+
+### D_DECIMALS
+
+Returns the number of decimals for the `Position` contract's debt token.
+
+```solidity
+function D_DECIMALS() external view returns (uint8);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type  | Description                                                                             |
+| :------------- | :---- | :-------------------------------------------------------------------------------------- |
+| `D_DECIMALS`   | uint8 | The ERC-20 token decimals of the `Position` contract's [D_TOKEN](position.mdx#d_token). |
+
+### B_DECIMALS
+
+Returns the number of decimals for the `Position` contract's base token.
+
+```solidity
+function B_DECIMALS() external view returns (uint8);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type  | Description                                                                             |
+| :------------- | :---- | :-------------------------------------------------------------------------------------- |
+| `B_DECIMALS`   | uint8 | The ERC-20 token decimals of the `Position` contract's [B_TOKEN](position.mdx#b_token). |

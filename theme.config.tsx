@@ -9,6 +9,9 @@ const config: DocsThemeConfig = {
 	editLink: {
 		component: null,
 	},
+	sidebar: {
+		defaultMenuCollapseLevel: 1,
+	},
 	footer: {
 		text: "© 2024 Chain Rule, LLC",
 	},
