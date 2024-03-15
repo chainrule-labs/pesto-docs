@@ -1,0 +1,63 @@
+# Introduction
+
+## What is shAave?
+
+shAave is a decentralized, on-chain derivatives protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
+
+## What can I do with shAave?
+
+Three examples of positions that can be created with shAave are:
+
+1. Stable Short
+2. Spread Short
+3. Stable Long
+
+Users can create as many positions as they wish, **independent of each other**, and choose **any combination of assets** supported by both Aave and Uniswap.
+
+### Stable Short
+
+A stable short position is most similar to traditional short-selling, where users borrow the asset they want to short, and sell it for a stable asset.
+
+**Example:** Bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for USDC. If WBTC's value drops, less USDC is required to buy the WBTC to repay the loan. The remaining USDC is profit.
+
+<div style={{ maxWidth: "450px", margin: "30px auto" }}>
+	![stableShortPosition](/stableShortPosition.svg)
+</div>
+
+### Spread Short
+
+A spread short position is a more complex strategy, where users choose users borrow the asset they want to short, and swap it for a non-stable asset. The aim of such strategy is to profit from the favorable spread between the short asset and the long asset.
+
+**Example:** Bullish on ETH and bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for WETH. Profit from WETH's rise and WBTC's fall.
+
+<div style={{ maxWidth: "450px", margin: "30px auto" }}>
+	![spreadShortPosition](/spreadShortPosition.svg)
+</div>
+
+### Stable Long
+
+A stable long position involves borrowing a stable asset and swapping it for a non-stable asset to hold.
+
+Example: Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more WETH. If ETH's value rises, you swap it for more DAI than you borrowed, and keep the difference as profit.
+
+<div style={{ maxWidth: "450px", margin: "30px auto" }}>
+	![longPosition](/longPosition.svg)
+</div>
+
+### Earn Interest
+
+Users earn interest on Aave from both the collateral token and the long token, since the long token is supplied to Aave as collateral by default. This also improves the health factor of the position's loan, reducing the risk of liquidation.
+
+### Leverage
+
+Since the long token is added to Aave as collateral by default, users can borrow more of the short token against this collateral and swap it for more long token. This process can be repeated multiple times to increase a position's leverage.
+
+## How is risk mitigated across different positions?
+
+Each shAave position is independent and has its own Aave account. This means that liquidation risk from one position does not affect other positions.
+
+![isolatedPositions](/isolatedPositions.svg)
+
+## Where can I see the code?
+
+On [GitHub](https://github.com/chainrule-labs/shaave-contracts).

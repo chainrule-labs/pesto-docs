@@ -1,0 +1,24 @@
+# Fees
+
+## How much do I have to pay in fees?
+
+Users only pay fees when increasing their short position or when adding leverage to their position.
+
+The maximum fee that users will pay is 0.3% of the collateral supplied when adding to a position.
+
+Users interacting with the shAave protocol through a client may get discounts, as client operators earn a share of the protocol fees and may offer incentives by forgoing some of their earnings in favor of their users.
+
+**Example:** If the current client rate is 30%, this means that a client can earn 30% of the maximum fee. However, a client can opt to only keep 90% of those earnings by setting their take rate to 90%. The remaining 10% of that client's earnings is applied as a discount to the total fees their users are required to pay. This would mean that:
+
+-   Users of that client pay a fee of 0.291% instead of 0.3%.
+-   The 0.291% fee collected is distributed as follows:
+    -   The utilized client keeps 0.081%.
+    -   The protocol keeps 0.21%.
+
+These fees are expressed as a percentage of the collateral amount supplied by the user when increasing their short position or when adding leverage to their position.
+
+For a detailed breakdown of how fees are calculated, refer to the [Technical Docs](/technical-docs/fees).
+
+## Do I have to pay fees when adding collateral to my position to increase its health factor on Aave?
+
+No. There are only two functions on the `Position` smart contract that collect fees: [`add`](/technical-docs/contracts/position.md#add), which increases the short position, and [`addLeverage`](..//technical-docs/contracts/position.md#addleverage), which adds leverage to the position using the `Position` contract's base token balance.
