@@ -1,6 +1,6 @@
 {
 	"index": "Introduction",
-	"faq": "FAQ",
-	"references": "References",
-	"technical-docs": "Technical Docs"
+	"user-docs": "User Docs",
+	"technical-docs": "Technical Docs",
+	"references": "References"
 }

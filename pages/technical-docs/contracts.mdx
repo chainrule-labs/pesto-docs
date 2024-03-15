@@ -1,3 +1,21 @@
 # Contracts
 
-Coming soon...
+The shAave protocol consists of three primary smart contracts: two core and one periphery.
+
+## Core
+
+### PositionFactory
+
+The `PositionFactory` contract is responsible for creating `Position` contracts.
+
+### Position
+
+The `Position` contract represents one position of an individual user. A single user can own multiple `Position` contracts, each representing a different combination of collateral, debt, and base tokens.
+
+`Position` contracts are deployed by the `PositionFactory` contract via the `createPosition` function.
+
+## Periphery
+
+### FeeCollector
+
+The `FeeCollector` contract is responsible for collecting and allocating protocol fees.

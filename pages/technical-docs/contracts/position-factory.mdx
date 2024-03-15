@@ -1,0 +1,99 @@
+# PositionFactory
+
+## Description
+
+The `PositionFactory` contract is responsible for creating [`Position`](position.mdx) contracts.
+
+## Write Functions
+
+### createPosition
+
+Deploys a `Position` contract for `msg.sender`, given a `_cToken`, `_dToken`, and `_bToken`.
+
+```solidity
+function createPosition(
+    address _cToken,
+    address _dToken,
+    address _bToken
+) external payable returns (address position);
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                      |
+| :------------- | :-------- | :--------------------------------------------------------------------------------------------------------------- |
+| `_cToken`      | `address` | The collateral token: <br/><br/> The address of the ERC-20 token to be used as collateral.                       |
+| `_dToken`      | `address` | The debt token: <br/><br/> The address of the ERC-20 token to borrow. This is the token the user wants to short. |
+| `_bToken`      | `address` | The base token: <br/><br/> The address of the ERC-20 token to hold. This is the token the user wants to long.    |
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                     |
+| :------------- | :-------- | :---------------------------------------------- |
+| `position`     | `address` | The address of the `Position` contract created. |
+
+## Read Functions
+
+### getPositions
+
+Returns a list of `Position` contract addresses for the given `_positionOwner`, which represents all of the owner's positions.
+
+```solidity
+function getPositions(
+    address _positionOwner
+) external view returns (address[] memory);
+```
+
+#### Input Parameters
+
+| Parameter Name   | Type      | Description                             |
+| :--------------- | :-------- | :-------------------------------------- |
+| `_positionOwner` | `address` | The address of a shAave user's account. |
+
+#### Output Parameters
+
+| Parameter Name | Type        | Description                                                               |
+| :------------- | :---------- | :------------------------------------------------------------------------ |
+| `positions`    | `address[]` | The addresses of all the `Position` contracts that `_positionOwner` owns. |
+
+### positions
+
+Returns the address of a `Position` contract given an `_owner`, `_cToken`, `_dToken`, and `_bToken`.
+
+```solidity
+function positions(
+    address _owner,
+    address _cToken,
+    address _dToken,
+    address _bToken
+) external view returns (address);
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                  |
+| :------------- | :-------- | :----------------------------------------------------------------------------------------------------------- |
+| `_owner`       | `address` | The address of the `Position` contract owner.                                                                |
+| `_cToken`      | `address` | The collateral token: <br/><br/> The address of the ERC-20 token that was used as collateral.                |
+| `_dToken`      | `address` | The debt token: <br/><br/> The address of the ERC-20 token was borrowed. This is the token the user shorted. |
+| `_bToken`      | `address` | The base token: <br/><br/> The address of the ERC-20 token held. This is the token the user longed.          |
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                             |
+| :------------- | :-------- | :-------------------------------------- |
+| `position`     | `address` | The address of the `Position` contract. |
+
+### owner
+
+Returns the owner of the `PositionFactory` contract.
+
+```solidity
+function owner() external view returns (address);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                             |
+| :------------- | :-------- | :-------------------------------------------------------------------------------------- |
+| `owner`        | `address` | The address of the account that has owner privileges on the `PositionFactory` contract. |

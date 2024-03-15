@@ -1,0 +1,5 @@
+{
+	"position-factory": "PositionFactory",
+	"position": "Position",
+	"fee-collector": "FeeCollector"
+}
