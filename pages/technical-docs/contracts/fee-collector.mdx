@@ -3,3 +3,190 @@
 ## Description
 
 The `FeeCollector` contract is responsible for collecting and allocating protocol fees.
+
+## Write Functions
+
+### collectFees
+
+Collects and allocates fees after user savings have been deducted from the [0.3%](position.mdx#protocol_fee_rate) maximum protocol fee. This function is called by `Position` contracts whenever [`add`](position.mdx#add) and [`addLeverage`](position.mdx#addleverage) are called.
+
+```solidity
+function collectFees(
+    address _client,
+    address _token,
+    uint256 _amt,
+    uint256 _clientFee
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                                                                                                                                         |
+| :------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_client`      | `address` | The address of the client operator.                                                                                                                                                                                                                                                 |
+| `_token`       | `address` | The ERC-20 token address in which to collect fees. <br/><br/> This is the collateral token of the calling `Position` contract.                                                                                                                                                      |
+| `_amt`         | `uint256` | The total amount of fees to collect after user savings have been deducted from the [0.3%](/technical-docs/contracts/position.mdx#protocol_fee_rate) maximum protocol fee. <br/><br/> The transaction-specific user savings and `_clientFee` are returned by `getClientAllocations`. |
+| `_clientFee`   | `uint256` | The portion of the [0.3%](/technical-docs/contracts/position.mdx#protocol_fee_rate) maximum protocol fee that is allocated to the specified client.                                                                                                                                 |
+
+### clientWithdraw
+
+Allows client operators to withdraw accumulated fees from the contract, for the specified ERC-20 token.
+
+🚨 [Client operators](/references/glossary.mdx) can check if they have any fees to withdraw by calling [`balances`](feecollector.mdx#balances). 🚨
+
+```solidity
+function clientWithdraw(
+    address _token
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                  |
+| :------------- | :-------- | :------------------------------------------- |
+| `_token`       | `address` | The address of the ERC-20 token to withdraw. |
+
+### setClientTakeRate
+
+Allows [client operators](/references/glossary.mdx) to set their take rate. This is the percentage of the client rate that the client operator keeps. Amounts less than 100% give the client's users a protocol fee discount.
+
+🚨 The default client take rate is 0%. If a client operator does not set a take rate, 100% of the client fees will go to the users of that client. 🚨
+
+```solidity
+function setClientTakeRate(
+    uint256 _clientTakeRate
+) external payable;
+```
+
+#### Input Parameters
+
+| Parameter Name    | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                            |
+| :---------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_clientTakeRate` | `uint256` | The percentage of the client rate that the calling client operator keeps. <br/><br/> Ex: 50 = 50%. <br/><br/> If the `clientTakeRate` for a given client is 50%, this means that 50% of the fees that the client collects are given back to their users. This is done by discounting the total protocol fee that their users have to pay when calling `add` or `addLeverage` on a `Position` contract. |
+
+## Read Functions
+
+### clientRate
+
+Returns the current client rate, which is the percentage of the [0.3%](position.mdx#protocol_fee_rate) fee that a client operator receives if their `clientTakeRate` is set to 100%.
+
+🚨 [Client operators](/references/glossary.mdx) are guaranteed between [30%-100%](https://github.com/chainrule-labs/shaave-contracts/blob/main/src/FeeCollector.sol#L113) of the total protocol fee. 🚨
+
+```solidity
+function clientRate() external view returns (uint256);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                                                                             |
+| :------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| `clientRate`   | `uint256` | The maximum percentage of the [0.3%](position.md#protocol_fee_rate) protocol fee a client operator can receive. <br/><br/> Ex: 30 = 30% |
+
+### clientTakeRates
+
+Returns the take rate of the specified [client operator](/references/glossary.mdx). This is the percentage of the client rate that the specified client operator keeps. Amounts less than 100% give the client's users a protocol fee discount.
+
+```solidity
+function clientTakeRates(
+    address _client
+) external view returns (uint256);
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                         |
+| :------------- | :-------- | :---------------------------------- |
+| `_client`      | `address` | The address of the client operator. |
+
+#### Output Parameters
+
+| Parameter Name   | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                  |
+| :--------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `clientTakeRate` | `uint256` | The percentage of the client rate that the given client operator keeps. <br/><br/> Ex: 50 = 50% <br/><br/> If the `clientTakeRate` for a given client is 50%, this means that 50% of the fees that the client collects are given back to their users. This is done by discounting the total protocol fee that users of that client have to pay when calling `add` or `addLeverage` on a `Position` contract. |
+
+### balances
+
+Returns the balance that the specified [client operator](/references/glossary.mdx) can withdraw from the `FeeCollector` contract, for the specified ERC-20 token.
+
+🚨 Client fees can be accumulated in any ERC-20 token that was used as collateral by users of the specified client. 🚨
+
+```solidity
+function balances(
+    address _client,
+    address _token
+) external view returns (uint256);
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                         |
+| :------------- | :-------- | :---------------------------------- |
+| `_client`      | `address` | The address of the client operator. |
+| `_token`       | `address` | The address of the ERC-20 token.    |
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                                                                                                                                          |
+| :------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `balance`      | `uint256` | The balance that the specified client operator can withdraw from the `FeeCollector` contract, for the specified ERC-20 token. <br/><br/> To withdraw this balance, the client operator must call [`clientWithdraw`](feecollector.mdx#clientwithdraw) on the `FeeCollector` contract. |
+
+### totalClientBalances
+
+Returns the total amount of fees allocated to [client operators](/references/glossary.mdx), for the specified ERC-20 token.
+
+```solidity
+function totalClientBalances(
+    address _token
+) external view returns (uint256);
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                      |
+| :------------- | :-------- | :------------------------------- |
+| `_token`       | `address` | The address of the ERC-20 token. |
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                             |
+| :------------- | :-------- | :-------------------------------------------------------------------------------------- |
+| `balance`      | `uint256` | The total amount of fees allocated to client operators, for the specified ERC-20 token. |
+
+### getClientAllocations
+
+Returns the fee amounts allocated to the specified [client operator](/references/glossary.mdx) and its users, given a transaction-specific protocol fee.
+
+```solidity
+function getClientAllocations(
+    address _client,
+    uint256 _maxFee
+) external view returns (uint256 userSavings, uint256 clientFee);
+```
+
+#### Input Parameters
+
+| Parameter Name | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| :------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_client`      | `address` | The address of the client operator.                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `_maxFee`      | `uint256` | The maximum fee a user will pay. <br/><br/> This fee is be denominated in [C_DECIMALS](position.mdx#c_decimals) for fees collected through [`add`](/technical-docs/contracts/position.mdx#add) and in [D_DECIMALS](position.mdx#d_decimals) for fees collected through [`addLeverage`](/technical-docs/contracts/position.mdx#addleverage). <br/><br/> Refer to the [Fees](/technical-docs/fees.mdx) page for details on how to calculate. |
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                                                    |
+| :------------- | :-------- | :------------------------------------------------------------------------------------------------------------- |
+| `userSavings`  | `uint256` | The amount of fees that the user is discounted from the maximum protocol fee, when using the specified client. |
+| `clientFee`    | `uint256` | The amount of the maximum protocol fee the client operator will receive.                                       |
+
+### owner
+
+Returns the owner of the `FeeCollector` contract.
+
+```solidity
+function owner() external view returns (address);
+```
+
+#### Output Parameters
+
+| Parameter Name | Type      | Description                                                                          |
+| :------------- | :-------- | :----------------------------------------------------------------------------------- |
+| `owner`        | `address` | The address of the account that has owner privileges on the `FeeCollector` contract. |
