@@ -2,11 +2,13 @@
 
 ## How much do I have to pay in fees?
 
-Users only pay fees when increasing their short position or when adding leverage to their position.
+Users only pay fees when increasing their position or when adding leverage to their position.
 
-The maximum fee that users will pay is 0.3% of the collateral supplied when adding to a position.
+When increasing a position, the maximum fee that users will pay is 0.3% of the collateral amount supplied in that transaction.
 
-Users interacting with the shAave protocol through a client may get discounts, as client operators earn a share of the protocol fees and may offer incentives by forgoing some of their earnings in favor of their users.
+When adding leverage to a position, the maximum fee that users will pay is 0.3% of the amount borrowed in that transaction.
+
+Users interacting with the shAave protocol through a client may get discounts, as [client operators](/references/glossary/mdx) earn a share of the protocol fees and may offer incentives by forgoing some of their earnings in favor of their users.
 
 **Example:** If the current client rate is 30%, this means that a client can earn 30% of the maximum fee. However, a client can opt to only keep 90% of those earnings by setting their take rate to 90%. The remaining 10% of that client's earnings is applied as a discount to the total fees their users are required to pay. This would mean that:
 
@@ -15,10 +17,10 @@ Users interacting with the shAave protocol through a client may get discounts, a
     -   The utilized client keeps 0.081%.
     -   The protocol keeps 0.21%.
 
-These fees are expressed as a percentage of the collateral amount supplied by the user when increasing their short position or when adding leverage to their position.
+These fees are expressed as a percentage of the collateral amount supplied when increasing a position or the amount borrowed when adding leverage to a position.
 
 For a detailed breakdown of how fees are calculated, refer to the [Technical Docs](/technical-docs/fees).
 
-## Do I have to pay fees when adding collateral to my position to increase its health factor on Aave?
+## Are fees collected when adding collateral to a position to increase its health factor on Aave?
 
-No. There are only two functions on the `Position` smart contract that collect fees: [`add`](/technical-docs/contracts/position.md#add), which increases the short position, and [`addLeverage`](..//technical-docs/contracts/position.md#addleverage), which adds leverage to the position using the `Position` contract's base token balance.
+No. There are only two functions on the `Position` smart contract that collect fees: [`add`](/technical-docs/contracts/position.md#add), which increases the position, and [`addLeverage`](..//technical-docs/contracts/position.md#addleverage), which adds leverage to the position using the base token balance.
