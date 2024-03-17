@@ -1,12 +1,26 @@
 # General
 
+## What is shAave?
+
+shAave is a decentralized, on-chain derivatives protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
+
+{/* ## What is the motivation behind shAave?
+
+Answer */}
+
+{/* ## What are the key benefits of shAave?
+
+Answer */}
+
 ## Is the core protocol immutable?
 
 Yes. The [core shAave smart contracts](/technical-docs/contracts) are immutable.
 
-## What aspects of the protocol are governed by the shAave DAO?
+Periphery functionality, such as the protocol fees, is governed by the shAave DAO.
 
-The core shAave protocol is immutable, but the DAO can govern [periphery functionality](/technical-docs/contracts) such as the protocol fees.
+## Does shAave charge any fees?
+
+Yes, please refer to the [Fees](/user-docs/fees) section for more information.
 
 ## How does shAave incentivize decentralized frontends?
 
@@ -16,7 +30,41 @@ Frontend operators can also choose to offer users of their frontend a discount o
 
 This feature was inspired by the [Liquity Protocol](https://www.liquity.org/frontend).
 
-## Why long with shAave, why not just hold long token?
+## What are the use cases for shAave?
+
+Three examples of positions that can be created with shAave are:
+
+1. Stable Short
+2. Spread Short
+3. Stable Long
+
+Users can create as many positions as they wish, **independent of each other**, and choose **any combination of assets** supported by both Aave and Uniswap.
+
+A stable short position is most similar to traditional short-selling, where users borrow the asset they want to short, and sell it for a stable asset.
+
+**Example:** Bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for USDC. If WBTC's value drops, less USDC is required to buy the WBTC to repay the loan. The remaining USDC is profit.
+
+<div style={{ maxWidth: "450px", margin: "30px auto" }}>
+	![stableShort](/stableShortGrayBg1x.png)
+</div>
+
+A spread short position is a more complex strategy, where users choose to borrow the asset they want to short, and swap it for a non-stable asset. The aim of such strategy is to profit from the favorable spread between the short asset and the long asset.
+
+**Example:** Bullish on ETH and bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for WETH. Profit from WETH's rise and WBTC's fall.
+
+<div style={{ maxWidth: "450px", margin: "30px auto" }}>
+	![spreadShort](/spreadShortGrayBg1x.png)
+</div>
+
+A stable long position involves borrowing a stable asset and swapping it for a non-stable asset to hold.
+
+Example: Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more WETH. If ETH's value rises, you swap it for more DAI than you borrowed, and keep the difference as profit.
+
+<div style={{ maxWidth: "450px", margin: "30px auto" }}>
+	![stableLong](/stableLongGrayBg1x.png)
+</div>
+
+## Why long with shAave, why not just hold?
 
 Suppose a user only has 1 WETH, and 1 WETH = 1000 USDC at $t_1$, and 1 WETH = 1500 USDC at $t_2$.
 
@@ -32,4 +80,12 @@ Now, the user is exposed to the potential gains or losses of 1.9 WETH, which mea
 
 If the user closes the position at $t_2$, the profit is 1350 USDC - interest - fees.
 
-{/* ## How much leverage can be added to my shAave position? Need to calculate this. */}
+## How is liquidation risk mitigated on shAave across different positions?
+
+Each shAave position is independent and has its own Aave account. This means that liquidation risk from one position does not affect other positions. Furthermore, the protocol supplies the long token to Aave as collateral by default. This allows users to earn additional interest and improves the health factor of the position's loan, reducing the risk of liquidation.
+
+![indPositions](/indPositionsGrayBg1x.png)
+
+{/* ## How much leverage can be added to my shAave position? 
+
+Need to calculate this. */}
