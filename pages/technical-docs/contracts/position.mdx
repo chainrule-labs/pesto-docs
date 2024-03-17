@@ -87,12 +87,12 @@ function addLeverage(
 
 #### Input Parameters
 
-| Parameter Name   | Type      | Description                                                                                                                   |
-| :--------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------- |
-| `_dAmt`          | `uint256` |                                                                                                                               |
-| `_swapAmtOutMin` | `uint256` | The minimum amount of output [B_TOKEN](position.mdx#b_token) from the swap, in order for the transaction to go through.       |
-| `_poolFee`       | `uint24`  | [The Uniswap pool fee tier.](https://docs.uniswap.org/concepts/protocol/fees#pool-fees-tiers) <br/><br/> Ex: `3000` for 0.30% |
-| `_client`        | `address` | The address of the [client operator](/references/glossary/mdx). <br/><br/> ❗ Use `address(0)` if not using a client.         |
+| Parameter Name   | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| :--------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `_dAmt`          | `uint256` | The amount of [D_TOKEN](position.mdx#d_token) to borrow. <br/><br/> To calculate the upper bound of this amount, `getUserAccountData` on [Aave's Pool contract](https://docs.aave.com/developers/core-contracts/pool#getuseraccountdata) and `getAssetPrice` on [Aave's Oracle contract](https://docs.aave.com/developers/core-contracts/aaveoracle#getassetprice) must be called. <br/><br/> Here is the pseudocode to calculate the max borrow amount: <br/><br/> <code>(cTotalUSD, dTotalUSD,,, ltv,) = AavePool.getUserAccountData(PositionAddr) <br/><br/> dTokenPriceUSD = AaveOracle.getAssetPrice(D_TOKEN) <br/><br/> dMaxUSD = (cTotalUSD \* ltv) / 1e4 <br/><br/> maxBorrowUSD = dMaxUSD - dTotalUSD <br/><br/> maxBorrowAmt = (maxBorrowUSD \* 10 \*\* (D_DECIMALS)) / dTokenPriceUSD</code> |
+| `_swapAmtOutMin` | `uint256` | The minimum amount of output [B_TOKEN](position.mdx#b_token) from the swap, in order for the transaction to go through.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `_poolFee`       | `uint24`  | [The Uniswap pool fee tier.](https://docs.uniswap.org/concepts/protocol/fees#pool-fees-tiers) <br/><br/> Ex: `3000` for 0.30%                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `_client`        | `address` | The address of the [client operator](/references/glossary/mdx). <br/><br/> ❗ Use `address(0)` if not using a client.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ### reduce
 
@@ -254,27 +254,9 @@ extractERC20(address _token) external payable;
 
 ## Read Functions
 
-### PROTOCOL_FEE_RATE
-
-Returns the maximum percentage that the protocol charges each revenue-generating transaction. This is a constant 0.3%.
-
-The 0.3% fee is charged only when the [`add`](position.mdx#add) and [`addLeverage`](position.mdx#addleverage) functions are called on the `Position` contract. When [`add`](position.mdx#add) is called, 0.3% of the supplied [C_TOKEN](position.mdx#c_token) is taken as a fee. When [`addLeverage`](position.mdx#addleverage) is called, 0.3% of the supplied [D_TOKEN](position.mdx#d_token) is taken as a fee.
-
-🚨 Depending on the specific arrangement, a portion of this fee may be allocated to [client operators](/references/glossary/mdx), their users, or both. This variability is the reason it is referred to as the "maximum" fee. 🚨
-
-```solidity
-function PROTOCOL_FEE_RATE() external view returns (uint256);
-```
-
-#### Output Parameters
-
-| Parameter Name      | Type      | Description                                                                                                     |
-| :------------------ | :-------- | :-------------------------------------------------------------------------------------------------------------- |
-| `PROTOCOL_FEE_RATE` | `uint256` | The maximum percentage fee charged by the protocol each revenue-generating transaction. <br/><br/> Ex: 3 = 0.3% |
-
 ### FEE_COLLECTOR
 
-Returns the address of the [`FeeCollector`](feecollector.mdx) contract, which is responsible for collecting and allocating protocol fees.
+Returns the address of the [`FeeCollector`](fee-collector.mdx) contract, which is responsible for collecting and allocating protocol fees.
 
 ```solidity
 function FEE_COLLECTOR() external view returns (address);
@@ -282,9 +264,9 @@ function FEE_COLLECTOR() external view returns (address);
 
 #### Output Parameters
 
-| Parameter Name  | Type      | Description                                                                                                                                                                                                                                                                                                                              |
-| :-------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FEE_COLLECTOR` | `address` | The address of the FeeCollector contract. <br/><br/> When `add` and `addLeverage` functions are called on the `Position` contract, the `FeeCollector` contract collects a 0.3% fee. Depending on the specific arrangement, a portion of this fee may be allocated to [client operators](/references/glossary/mdx), their users, or both. |
+| Parameter Name  | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                          |
+| :-------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FEE_COLLECTOR` | `address` | The address of the FeeCollector contract. <br/><br/> When `add` and `addLeverage` functions are called on the `Position` contract, the `FeeCollector` contract collects a [fee](/technical-docs/contracts/fee-collector.mdx#protocol_fee_rate). Depending on the specific arrangement, a portion of this fee may be allocated to [client operators](/references/glossary/mdx), their users, or both. |
 
 ### OWNER
 

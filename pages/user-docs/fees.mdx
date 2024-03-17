@@ -1,5 +1,7 @@
 # Fees
 
+🚨 **Note:** To obtain the current fee rate, call [PROTOCOL_FEE_RATE](/technical-docs/contracts/fee-collector.mdx#protocol_fee_rate) on the `FeeCollector` smart contract. The fee rate when this document was written was 0.3%. Hence, a 0.3% fee rate is used throughout this document for simplicity. This fee will not change often, and any changes must undergo governance voting. 🚨
+
 ## How much do I have to pay in fees?
 
 Users only pay fees when increasing their position or when adding leverage to their position.
@@ -21,6 +23,6 @@ These fees are expressed as a percentage of the collateral amount supplied when 
 
 For a detailed breakdown of how fees are calculated, refer to the [Technical Docs](/technical-docs/fees).
 
-## Are fees collected when adding collateral to a position to increase its health factor on Aave?
+## I'm adding collateral just to improve my position's health factor on Aave? Is there a fee for this?
 
-No. There are only two functions on the `Position` smart contract that collect fees: [`add`](/technical-docs/contracts/position.md#add), which increases the position, and [`addLeverage`](..//technical-docs/contracts/position.md#addleverage), which adds leverage to the position using the base token balance.
+No. There are only two functions on the `Position` smart contract that collect fees: [`add`](/technical-docs/contracts/position.md#add), which increases the position size, and [`addLeverage`](../technical-docs/contracts/position.md#addleverage), which adds leverage to the position using the base token balance.
