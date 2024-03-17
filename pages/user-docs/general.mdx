@@ -2,8 +2,34 @@
 
 ## Is the core protocol immutable?
 
-Yes.
+Yes. The [core shAave smart contracts](/technical-docs/contracts) are immutable.
 
 ## What aspects of the protocol are governed by the shAave DAO?
 
-Only periphery functionality.
+The core shAave protocol is immutable, but the DAO can govern [periphery functionality](/technical-docs/contracts) such as the protocol fees.
+
+## How does shAave incentivize decentralized frontends?
+
+There is a small [protocol fee](/user-docs/fees) charged when users increase a position's size and when they add leverage to a position. A portion of this fee goes to the protocol and another portion is allocated to frontend operators.
+
+Frontend operators can also choose to offer users of their frontend a discount on the protocol fee, which incentivizes users to use their frontend.
+
+This feature was inspired by the [Liquity Protocol](https://www.liquity.org/frontend).
+
+## Why long with shAave, why not just hold long token?
+
+Suppose a user only has 1 WETH, and 1 WETH = 1000 USDC at $t_1$, and 1 WETH = 1500 USDC at $t_2$.
+
+If the user just holds 1 WETH, the net gains will be 500 USDC.
+
+If the user creates a position on shAave to long WETH, the following can be done automatically:
+
+1. Supply 1 WETH as collateral
+2. Borrow 900 USDC
+3. Swap 900 USDC for 0.9 WETH
+
+Now, the user is exposed to the potential gains or losses of 1.9 WETH, which means that, at $t_2$, 1.9 WETH = 2850 USDC.
+
+If the user closes the position at $t_2$, the profit is 1350 USDC - interest - fees.
+
+{/* ## How much leverage can be added to my shAave position? Need to calculate this. */}
