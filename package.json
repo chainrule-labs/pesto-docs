@@ -1,7 +1,7 @@
 {
-	"name": "shaave-docs-v2",
+	"name": "pesto-docs",
 	"version": "0.0.1",
-	"description": "shAave Documentation",
+	"description": "Pesto Documentation",
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
@@ -9,11 +9,11 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/chainrule-labs/shaave-docs-v2.git"
+		"url": "git+https://github.com/chainrule-labs/pesto-docs.git"
 	},
 	"author": "0xernesto (http://github.com/0xernesto)",
 	"license": "MIT",
-	"homepage": "https://github.com/chainrule-labs/shaave-docs-v2",
+	"homepage": "https://github.com/chainrule-labs/pesto-docs",
 	"dependencies": {
 		"next": "^13.0.6",
 		"nextra": "latest",

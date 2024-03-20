@@ -10,7 +10,7 @@ When increasing a position, the maximum fee that users will pay is 0.3% of the c
 
 When adding leverage to a position, the maximum fee that users will pay is 0.3% of the amount borrowed in that transaction.
 
-Users interacting with the shAave protocol through a client may get discounts, as [client operators](/references/glossary/mdx) earn a share of the protocol fees and may offer incentives by forgoing some of their earnings in favor of their users.
+Users interacting with the Pesto protocol through a client may get discounts, as [client operators](/references/glossary/mdx) earn a share of the protocol fees and may offer incentives by forgoing some of their earnings in favor of their users.
 
 **Example:** If the current client rate is 30%, this means that a client can earn 30% of the maximum fee. However, a client can opt to only keep 90% of those earnings by setting their take rate to 90%. The remaining 10% of that client's earnings is applied as a discount to the total fees their users are required to pay. This would mean that:
 
@@ -23,6 +23,10 @@ These fees are expressed as a percentage of the collateral amount supplied when 
 
 For a detailed breakdown of how fees are calculated, refer to the [Technical Docs](/technical-docs/fees).
 
-## I'm adding collateral just to improve my position's health factor on Aave? Is there a fee for this?
+## I'm adding collateral just to improve my position's health factor on Aave. Is there a fee for this?
 
 No. There are only two functions on the `Position` smart contract that collect fees: [`add`](/technical-docs/contracts/position.md#add), which increases the position size, and [`addLeverage`](../technical-docs/contracts/position.md#addleverage), which adds leverage to the position using the base token balance.
+
+## Do I have to pay fees when reducing or closing my position?
+
+No. Fees are collected only when increasing a position's size or whehn adding leverage to a position.

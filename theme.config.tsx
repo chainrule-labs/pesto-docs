@@ -3,9 +3,9 @@ import { DocsThemeConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
 	project: {
-		link: "https://github.com/chainrule-labs/shaave-contracts",
+		link: "https://github.com/chainrule-labs/pesto-contracts",
 	},
-	docsRepositoryBase: "https://github.com/chainrule-labs/shaave-docs-v2",
+	docsRepositoryBase: "https://github.com/chainrule-labs/pesto-docs",
 	editLink: {
 		component: null,
 	},
@@ -17,14 +17,14 @@ const config: DocsThemeConfig = {
 	},
 	useNextSeoProps() {
 		return {
-			titleTemplate: "shAave - %s",
+			titleTemplate: "Pesto - %s",
 			description:
-				"shAave is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
+				"Pesto is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
 			openGraph: {
-				title: "shAave",
+				title: "Pesto",
 				description:
-					"shAave is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
-				url: "https://docs.shaave.io",
+					"Pesto is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
+				url: "https://docs.pesto.finance",
 				type: "website",
 				images: [
 					{
@@ -35,9 +35,9 @@ const config: DocsThemeConfig = {
 				site_name: "Documentation",
 			},
 			twitter: {
-				title: "shAave",
+				title: "Pesto",
 				description:
-					"shAave is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
+					"Pesto is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
 				card: "summary_large_image",
 				images: [
 					{
@@ -60,13 +60,8 @@ const config: DocsThemeConfig = {
 	),
 	logo: (
 		<>
-			<img
-				src="/logoShaave24x24.svg"
-				alt="shAave"
-				width={24}
-				height={24}
-			/>
-			<span style={{ marginLeft: ".4em", fontWeight: 800 }}>shAave</span>
+			<img src="/iconPesto24x24.svg" alt="Pesto" width={24} height={24} />
+			<span style={{ marginLeft: ".4em", fontWeight: 800 }}>Pesto</span>
 		</>
 	),
 };

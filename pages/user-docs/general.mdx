@@ -1,28 +1,28 @@
 # General
 
-## What is shAave?
+## What is Pesto?
 
-shAave is a decentralized, on-chain derivatives protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
+Pesto is a decentralized, on-chain derivatives protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
 
-{/* ## What is the motivation behind shAave?
+{/* ## What is the motivation behind Pesto?
 
 Answer */}
 
-{/* ## What are the key benefits of shAave?
+{/* ## What are the key benefits of Pesto?
 
 Answer */}
 
 ## Is the core protocol immutable?
 
-Yes. The [core shAave smart contracts](/technical-docs/contracts) are immutable.
+Yes. The [core Pesto smart contracts](/technical-docs/contracts) are immutable.
 
-Periphery functionality, such as the protocol fees, is governed by the shAave DAO.
+Periphery functionality, such as the protocol fees, is governed by the Pesto DAO.
 
-## Does shAave charge any fees?
+## Does Pesto charge any fees?
 
 Yes, please refer to the [Fees](/user-docs/fees) section for more information.
 
-## How does shAave incentivize decentralized frontends?
+## How does Pesto incentivize decentralized frontends?
 
 There is a small [protocol fee](/user-docs/fees) charged when users increase a position's size and when they add leverage to a position. A portion of this fee goes to the protocol and another portion is allocated to frontend operators.
 
@@ -30,9 +30,9 @@ Frontend operators can also choose to offer users of their frontend a discount o
 
 This feature was inspired by the [Liquity Protocol](https://www.liquity.org/frontend).
 
-## What are the use cases for shAave?
+## What can I do with Pesto?
 
-Three examples of positions that can be created with shAave are:
+Three examples of positions that can be created with Pesto are:
 
 1. Stable Short
 2. Spread Short
@@ -45,7 +45,7 @@ A stable short position is most similar to traditional short-selling, where user
 **Example:** Bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for USDC. If WBTC's value drops, less USDC is required to buy the WBTC to repay the loan. The remaining USDC is profit.
 
 <div style={{ maxWidth: "450px", margin: "30px auto" }}>
-	![stableShort](/stableShortGrayBg1x.png)
+	![stableShort](/stableShortDarkBg1x.png)
 </div>
 
 A spread short position is a more complex strategy, where users choose to borrow the asset they want to short, and swap it for a non-stable asset. The aim of such strategy is to profit from the favorable spread between the short asset and the long asset.
@@ -53,7 +53,7 @@ A spread short position is a more complex strategy, where users choose to borrow
 **Example:** Bullish on ETH and bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for WETH. Profit from WETH's rise and WBTC's fall.
 
 <div style={{ maxWidth: "450px", margin: "30px auto" }}>
-	![spreadShort](/spreadShortGrayBg1x.png)
+	![spreadShort](/spreadShortDarkBg1x.png)
 </div>
 
 A stable long position involves borrowing a stable asset and swapping it for a non-stable asset to hold.
@@ -61,16 +61,16 @@ A stable long position involves borrowing a stable asset and swapping it for a n
 Example: Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more WETH. If ETH's value rises, you swap it for more DAI than you borrowed, and keep the difference as profit.
 
 <div style={{ maxWidth: "450px", margin: "30px auto" }}>
-	![stableLong](/stableLongGrayBg1x.png)
+	![stableLong](/stableLongDarkBg1x.png)
 </div>
 
-## Why long with shAave, why not just hold?
+## Why long with Pesto, why not just hold?
 
 Suppose a user only has 1 WETH, and 1 WETH = 1000 USDC at $t_1$, and 1 WETH = 1500 USDC at $t_2$.
 
 If the user just holds 1 WETH, the net gains will be 500 USDC.
 
-If the user creates a position on shAave to long WETH, the following can be done automatically:
+If the user creates a position on Pesto to long WETH, the following can be done automatically:
 
 1. Supply 1 WETH as collateral
 2. Borrow 900 USDC
@@ -80,12 +80,12 @@ Now, the user is exposed to the potential gains or losses of 1.9 WETH, which mea
 
 If the user closes the position at $t_2$, the profit is 1350 USDC - interest - fees.
 
-## How is liquidation risk mitigated on shAave across different positions?
+## How is liquidation risk mitigated on Pesto across different positions?
 
-Each shAave position is independent and has its own Aave account. This means that liquidation risk from one position does not affect other positions. Furthermore, the protocol supplies the long token to Aave as collateral by default. This allows users to earn additional interest and improves the health factor of the position's loan, reducing the risk of liquidation.
+Each Pesto position is independent and has its own Aave account. This means that liquidation risk from one position does not affect other positions. Furthermore, the protocol supplies the long token to Aave as collateral by default. This allows users to earn additional interest and improves the health factor of the position's loan, reducing the risk of liquidation.
 
-![indPositions](/indPositionsGrayBg1x.png)
+![indPositions](/indPositionsDarkBg1x.png)
 
-{/* ## How much leverage can be added to my shAave position? 
+{/* ## How much leverage can be added to my Pesto position?
 
 Need to calculate this. */}

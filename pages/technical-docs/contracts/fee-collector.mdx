@@ -90,7 +90,7 @@ function PROTOCOL_FEE_RATE() external view returns (uint256);
 
 Returns the current client rate, which is the percentage of the [maximum protocol fee](/technical-docs/contracts/fee-collector.mdx#protocol_fee_rate) that a client operator receives if their `clientTakeRate` is set to 100%.
 
-🚨 [Client operators](/references/glossary.mdx) are guaranteed between [30%-100%](https://github.com/chainrule-labs/shaave-contracts/blob/main/src/FeeCollector.sol#L113) of the total protocol fee. 🚨
+🚨 [Client operators](/references/glossary.mdx) are guaranteed between [30%-100%](https://github.com/chainrule-labs/pesto-contracts/blob/main/src/FeeCollector.sol#L113) of the total protocol fee. 🚨
 
 ```solidity
 function clientRate() external view returns (uint256);
