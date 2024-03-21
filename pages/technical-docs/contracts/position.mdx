@@ -12,9 +12,9 @@ The `Position` contract represents one position of an individual user. A single 
 
 Adds to the position.
 
-🚨 This method requires the caller to approve the `Position` contract to spend `_cAmt` of the caller's [C_TOKEN](position.mdx#c_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function. 🚨
+🚨 This method requires the caller to approve the `Position` contract to spend `_cAmt` of the caller's [C_TOKEN](position.mdx#c_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function.
 
-🚨 [Fees](fee-collector.mdx#fees) are collected in terms of [C_TOKEN](position.mdx#c_token). 🚨
+🚨 [Fees](fee-collector.mdx#fees) are collected in terms of [C_TOKEN](position.mdx#c_token).
 
 ```solidity
 function add(
@@ -40,7 +40,7 @@ function add(
 
 Adds to the position using an [ERC-2612](https://eips.ethereum.org/EIPS/eip-2612) permit, obviating the need for a separate approve transaction.
 
-🚨 [Fees](fee-collector.mdx#fees) are collected in terms of [C_TOKEN](position.mdx#c_token). 🚨
+🚨 [Fees](fee-collector.mdx#fees) are collected in terms of [C_TOKEN](position.mdx#c_token).
 
 ```solidity
 function addWithPermit(
@@ -74,7 +74,7 @@ function addWithPermit(
 
 Adds leverage to the position using the [B_TOKEN](position.mdx#b_token) balance on Aave.
 
-🚨 [Fees](fee-collector.mdx#fees) are collected in terms of [D_TOKEN](position.mdx#d_token). 🚨
+🚨 [Fees](fee-collector.mdx#fees) are collected in terms of [D_TOKEN](position.mdx#d_token).
 
 ```solidity
 function addLeverage(
@@ -98,7 +98,7 @@ function addLeverage(
 
 Reduces a position based on the amount of [B_TOKEN](position.mdx#b_token) and [C_TOKEN](position.mdx#c_token) withdrawn.
 
-🚨 The [B_TOKEN](position.mdx#b_token) is withdrawn from Aave and swapped for the [D_TOKEN](position.mdx#d_token) to repay the loan. Only profitable positions are able fully reduce the position and withdraw all funds. 🚨
+🚨 The [B_TOKEN](position.mdx#b_token) is withdrawn from Aave and swapped for the [D_TOKEN](position.mdx#d_token) to repay the loan. Only profitable positions are able fully reduce the position and withdraw all funds.
 
 ```solidity
 function reduce(
@@ -124,7 +124,7 @@ function reduce(
 
 Increases the collateral amount backing the `Position` contract's loan.
 
-🚨 This method requires the caller to approve the `Position` contract to spend `_cAmt` of the caller's [C_TOKEN](position.mdx#c_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function. 🚨
+🚨 This method requires the caller to approve the `Position` contract to spend `_cAmt` of the caller's [C_TOKEN](position.mdx#c_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function.
 
 ```solidity
 function addCollateral(
@@ -166,7 +166,7 @@ function addCollateralWithPermit(
 
 Withdraws the specified amount of collateral from Aave and transfers it to the specified recipient.
 
-🚨 INSTRUCTIONS ON HOW TO CALCULATE MAX C AMOUNT AND MAX B AMOUNT TO WITHDRAW HERE 🚨
+🚨 INSTRUCTIONS ON HOW TO CALCULATE MAX C AMOUNT AND MAX B AMOUNT TO WITHDRAW HERE
 
 ```solidity
 function withdraw(
@@ -190,7 +190,7 @@ Repays outstanding debt to Aave.
 
 One use-case for this function is when a position was not profitable and the amount of [B_TOKEN](position.mdx#b_token) was not enough to repay the loan. If the `Position` owner wants to retrieve any remaining collateral, more [D_TOKEN](position.mdx#d_token) must be acquired elsewhere to pay off the remaining debt via this function.
 
-🚨 This method requires the caller to approve the `Position` contract to spend `_dAmt` of the caller's [D_TOKEN](position.mdx#d_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function. 🚨
+🚨 This method requires the caller to approve the `Position` contract to spend `_dAmt` of the caller's [D_TOKEN](position.mdx#d_token) via the token's ERC-20 [`approve`](https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#IERC20-approve-address-uint256-) function.
 
 ```solidity
 function repay(
@@ -264,9 +264,9 @@ function FEE_COLLECTOR() external view returns (address);
 
 #### Output Parameters
 
-| Parameter Name  | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                          |
-| :-------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FEE_COLLECTOR` | `address` | The address of the FeeCollector contract. <br/><br/> When `add` and `addLeverage` functions are called on the `Position` contract, the `FeeCollector` contract collects a [fee](/technical-docs/contracts/fee-collector.mdx#protocol_fee_rate). Depending on the specific arrangement, a portion of this fee may be allocated to [client operators](/references/glossary/mdx), their users, or both. |
+| Parameter Name  | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                |
+| :-------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FEE_COLLECTOR` | `address` | The address of the FeeCollector contract. <br/><br/> When `add` and `addLeverage` functions are called on the `Position` contract, the `FeeCollector` contract collects a [fee](/technical-docs/contracts/fee-collector.mdx#feeRate). Depending on the specific arrangement, a portion of this fee may be allocated to [client operators](/references/glossary/mdx), their users, or both. |
 
 ### OWNER
 

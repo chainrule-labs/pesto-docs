@@ -70,9 +70,12 @@ Example: Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more
 
 ## Why long with Pesto, why not just hold?
 
-Suppose a user only has 1 WETH, and 1 WETH = 1000 USDC at $t_1$, and 1 WETH = 1500 USDC at $t_2$.
+Suppose:
+- A user only has 1 WETH
+- 1 WETH = \$1,000 at $t_1$
+- 1 WETH = \$1,500 at $t_2$
 
-If the user just holds 1 WETH, the net gains will be 500 USDC.
+If the user just holds 1 WETH and sells at $t_2$, the profit will be $500.
 
 If the user creates a position on Pesto to long WETH, the following can be done automatically:
 
@@ -80,9 +83,9 @@ If the user creates a position on Pesto to long WETH, the following can be done 
 2. Borrow 900 USDC
 3. Swap 900 USDC for 0.9 WETH
 
-Now, the user is exposed to the potential gains or losses of 1.9 WETH, which means that, at $t_2$, 1.9 WETH = 2850 USDC.
+Now, the user is exposed to the potential gains or losses of 1.9 WETH.
 
-If the user closes the position at $t_2$, the profit is 1350 USDC - interest - fees.
+If the user closes the position at $t_2$, where 1.9 WETH = \$2,850, the profit would be \$950 - interest - fees.
 
 ## How is liquidation risk mitigated on Pesto across different positions?
 
