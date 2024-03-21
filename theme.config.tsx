@@ -19,16 +19,16 @@ const config: DocsThemeConfig = {
 		return {
 			titleTemplate: "Pesto - %s",
 			description:
-				"Pesto is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
+				"Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
 			openGraph: {
 				title: "Pesto",
 				description:
-					"Pesto is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
+					"Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
 				url: "https://docs.pesto.finance",
 				type: "website",
 				images: [
 					{
-						url: "/seoCard.png",
+						url: "https://docs.pesto.finance/seoCard.png",
 						alt: "og-seo-card-image",
 					},
 				],
@@ -37,15 +37,15 @@ const config: DocsThemeConfig = {
 			twitter: {
 				title: "Pesto",
 				description:
-					"Pesto is a decentralized, on-chain derivatives protocol that enables users to create independent positions.",
-				card: "summary_large_image",
+					"Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
+				cardType: "summary_large_image",
 				images: [
 					{
-						url: "/seoCard.png",
+						url: "https://docs.pesto.finance/seoCard.png",
 						alt: "twitter-seo-card-image",
 					},
 				],
-				site: "@chainrule_io",
+				site: "@pestofinance",
 			},
 		};
 	},
