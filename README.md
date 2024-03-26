@@ -1,6 +1,6 @@
 # Pesto Docs
 
-Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
+Pesto is a minimalist, on-chain DeFi protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
 
 ## License
 

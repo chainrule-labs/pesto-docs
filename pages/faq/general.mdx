@@ -2,7 +2,7 @@
 
 ## What is Pesto?
 
-Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
+Pesto is a minimalist, on-chain DeFi protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
 
 ## What is the motivation behind Pesto?
 
@@ -65,7 +65,7 @@ A stable short position is most similar to traditional short-selling, where user
 **Example:** Bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for USDC. If WBTC's value drops, less USDC is required to buy the WBTC to repay the loan. The remaining USDC is profit.
 
 <div style={{ maxWidth: "450px", margin: "30px auto" }}>
-	![stableShort](/stableShortGreenBg.png)
+	![stableShort](/stableShort.png)
 </div>
 
 A spread short position is a more complex strategy, where users choose to borrow the asset they want to short, and swap it for a non-stable asset. The aim of such a strategy is to profit from the favorable spread between the short asset and the long asset.
@@ -73,7 +73,7 @@ A spread short position is a more complex strategy, where users choose to borrow
 **Example:** Bullish on ETH and bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for WETH. Profit from WETH's rise and WBTC's fall.
 
 <div style={{ maxWidth: "450px", margin: "30px auto" }}>
-	![spreadShort](/spreadShortGreenBg.png)
+	![spreadShort](/spreadShort.png)
 </div>
 
 A stable long position involves borrowing a stable asset and swapping it for a non-stable asset to hold.
@@ -81,7 +81,7 @@ A stable long position involves borrowing a stable asset and swapping it for a n
 **Example:** Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more WETH. If ETH's value rises, you swap it for more DAI than you borrowed, and keep the difference as profit.
 
 <div style={{ maxWidth: "450px", margin: "30px auto" }}>
-	![stableLong](/stableLongGreenBg.png)
+	![stableLong](/stableLong.png)
 </div>
 
 ## Why long with Pesto, why not just hold?
@@ -108,8 +108,4 @@ If the user closes the position at $t_2$, where 1.9 WETH = \$2,850, the profit w
 
 Each Pesto position is independent and has its own Aave account. This means that liquidation risk from one position does not affect other positions. Furthermore, the protocol supplies the long token to Aave as collateral by default. This allows users to earn additional interest and improves the health factor of the position's loan, reducing the risk of liquidation.
 
-![indPositions](/indPositionsGreenBg.png)
-
-{/* ## How much leverage can be added to my Pesto position?
-
-Need to calculate this. */}
+![indPositions](/indepPositions.png)

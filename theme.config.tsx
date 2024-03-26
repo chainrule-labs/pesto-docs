@@ -19,11 +19,11 @@ const config: DocsThemeConfig = {
 		return {
 			titleTemplate: "Pesto - %s",
 			description:
-				"Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
+				"Pesto is a minimalist, on-chain DeFi protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
 			openGraph: {
 				title: "Pesto",
 				description:
-					"Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
+					"Pesto is a minimalist, on-chain DeFi protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
 				url: "https://docs.pesto.finance",
 				type: "website",
 				images: [
@@ -37,7 +37,7 @@ const config: DocsThemeConfig = {
 			twitter: {
 				title: "Pesto",
 				description:
-					"Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
+					"Pesto is a minimalist, on-chain DeFi protocol that enables users to create independent positions with varying degrees of exposure and hedging strategies.",
 				cardType: "summary_large_image",
 				images: [
 					{
