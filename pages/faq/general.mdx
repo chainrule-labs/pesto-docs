@@ -4,13 +4,29 @@
 
 Pesto is a minimalist, on-chain derivatives protocol that enables users to create independent positions in a single transaction, offering varying degrees of exposure and hedging strategies. The core protocol is immutable, operates without governance, and incentivizes decentralized frontends.
 
-{/* ## What is the motivation behind Pesto?
+## What is the motivation behind Pesto?
 
-Answer */}
+Many protocols require starting liquidity pools from scratch, which results in fragmented, shallow liquidity. To solve this, Pesto aims to provide competitive DeFi capabilities, built on top of two of the most robust DeFi protocols, Aave and Uniswap. By leveraging existing liquidity, Pesto circumvents the need to initially fund liquidity pools and avoids contributing to liquidity fragmentation.
 
-{/* ## What are the key benefits of Pesto?
+Pesto also introduces a new position primitive, called a spread short, which involves simultaneously longing and shorting two different assets in the same position. Opening similar positions on existing protocols requires twice the amount of collateral for the same exposure.
 
-Answer */}
+Each Pesto position is independent and has its own Aave account. This means that liquidation risk from one position does not affect other positions. Furthermore, the protocol keeps all funds backing users’ positions on Aave as collateral, lowering liquidation risk and earning interest for users.
+
+## What are the key benefits of Pesto?
+
+### Ecosystem Benefits
+
+-   Use of deep liquidity from two of the most robust DeFi protocols, Aave and Uniswap. This brings more capabilities to users without exacerbating the liquidity fragmentation problem.
+-   Introduction of a [decentralized frontend incentive mechanism](/faq/general#how-does-pesto-incentivize-decentralized-frontends) that other protocols can adopt to increase decentralization, lower legal risks, and improve user experience.
+
+### User Benefits
+
+-   Opening or closing a short position via Aave and Uniswap is a one-step process, since Pesto combines borrowing and swapping into one gas-efficient transaction.
+-   The ability to open a [spread short](/faq/general#what-can-i-do-with-pesto) position to simultaneously long and short two different assets in the same position. Opening similar positions on existing protocols requires twice the amount of collateral for the same exposure.
+-   Isolated risk across different positions, meaning that risk from one position does not affect other positions.
+-   Earn interest on supplied collateral and the position's long token.
+-   Reduced liquidation risk for positions with lower leverage, which means positions can be opened over longer time horizons.
+-   Lower operational costs through reduced gas fees and ongoing expenses. Pesto features 25% lower gas fees than GMX, and it leverages Aave borrowing rates, which are significantly lower than perpetual funding rates.
 
 ## Is the core protocol immutable?
 
@@ -38,9 +54,9 @@ This feature was inspired by the [Liquity Protocol](https://www.liquity.org/fron
 
 Three examples of positions that can be created with Pesto are:
 
-1. Stable Short
-2. Spread Short
-3. Stable Long
+1. **Stable Short:** short an asset against a stable asset.
+2. **Spread Short:** short an asset and long a different asset simultaneously.
+3. **Stable Long:** long an asset against a stable asset.
 
 Users can create as many positions as they wish, **independent of each other**, and choose **any combination of assets** supported by both Aave and Uniswap.
 
@@ -52,7 +68,7 @@ A stable short position is most similar to traditional short-selling, where user
 	![stableShort](/stableShortGreenBg.png)
 </div>
 
-A spread short position is a more complex strategy, where users choose to borrow the asset they want to short, and swap it for a non-stable asset. The aim of such strategy is to profit from the favorable spread between the short asset and the long asset.
+A spread short position is a more complex strategy, where users choose to borrow the asset they want to short, and swap it for a non-stable asset. The aim of such a strategy is to profit from the favorable spread between the short asset and the long asset.
 
 **Example:** Bullish on ETH and bearish on BTC? Use USDC as collateral to borrow WBTC, and swap for WETH. Profit from WETH's rise and WBTC's fall.
 
@@ -62,7 +78,7 @@ A spread short position is a more complex strategy, where users choose to borrow
 
 A stable long position involves borrowing a stable asset and swapping it for a non-stable asset to hold.
 
-Example: Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more WETH. If ETH's value rises, you swap it for more DAI than you borrowed, and keep the difference as profit.
+**Example:** Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more WETH. If ETH's value rises, you swap it for more DAI than you borrowed, and keep the difference as profit.
 
 <div style={{ maxWidth: "450px", margin: "30px auto" }}>
 	![stableLong](/stableLongGreenBg.png)
@@ -71,9 +87,10 @@ Example: Bullish on ETH? Use WETH as collateral to borrow DAI, and swap for more
 ## Why long with Pesto, why not just hold?
 
 Suppose:
-- A user only has 1 WETH
-- 1 WETH = \$1,000 at $t_1$
-- 1 WETH = \$1,500 at $t_2$
+
+-   A user only has 1 WETH
+-   1 WETH = \$1,000 at $t_1$
+-   1 WETH = \$1,500 at $t_2$
 
 If the user just holds 1 WETH and sells at $t_2$, the profit will be $500.
 
