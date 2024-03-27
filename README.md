@@ -4,4 +4,4 @@ Pesto is a minimalist, on-chain DeFi protocol that enables users to create indep
 
 ## License
 
-This project is released under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is released under the MIT License - see the [LICENSE.md]([LICENSE.md](https://github.com/chainrule-labs/pesto-docs/blob/main/LICENSE) file for details.
