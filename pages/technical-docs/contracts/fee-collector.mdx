@@ -74,7 +74,7 @@ This fee is charged only when the [`add`](position.mdx#add) and [`addLeverage`](
 
 Ex: Suppose `feeRate = 3`. When [`add`](position.mdx#add) is called, 0.3% of the supplied [C_TOKEN](position.mdx#c_token) would be taken as a fee. When [`addLeverage`](position.mdx#addleverage) is called, 0.3% of the supplied [D_TOKEN](position.mdx#d_token) would be taken as a fee.
 
-🚨 Depending on the specific arrangement, a portion of this fee may be allocated to [client operators](/references/glossary/mdx), their users, or both. This variability is the reason it is referred to as the "maximum" fee.
+🚨 Depending on the specific arrangement, a portion of this fee may be allocated to [client operators](/references/glossary.mdx), their users, or both. This variability is the reason it is referred to as the "maximum" fee.
 
 ```solidity
 function feeRate() external view returns (uint256);
