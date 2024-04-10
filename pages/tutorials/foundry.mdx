@@ -1,0 +1,90 @@
+# Using Pesto via Foundry
+
+The following is a step-by-step process for interacting with Pesto via the [Foundry CLI](https://book.getfoundry.sh/).
+
+The commands below assume that the following environment variables have been set:
+
+```bash
+export POSITION_FACTORY=0x86Dc69F370C899Ba63dFfE55ACA0662F28Ed1033
+export USDC=0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d
+export WETH=0x1dF462e2712496373A347f8ad10802a5E95f053D
+export CLIENT=0x0000000000000000000000000000000000000000
+export AAVE_POOL=0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff
+export AAVE_ORACLE=0x0153002d20B96532C639313c2d54c3dA09109309
+export LTV=70
+export UNI_POOL_FEE=500
+export RPC=<YOUR_ARBITRUM_SEPOLIA_RPC_URL>
+export PK=<YOUR_PRIVATE_KEY>
+```
+
+## Create a Position Contract
+
+The first step to open a short Position with Pesto is to call [`createPosition`](/technical-docs/contracts/position-factory#createposition) on the `PositionFactory` contract. This will deploy a [`Position`](/technical-docs/contracts/position.mdx) contract for you for the given combination of tokens. In this example, the `Position` contract being deployed is one where the collateral token is USDC, the debt token is WETH, and the base token is USDC.
+
+```bash
+cast send $POSITION_FACTORY "createPosition(address,address,address)(address)" $USDC $WETH $USDC --rpc-url $RPC --private-key $PK
+```
+
+You can call [`getPositions`](/technical-docs/contracts/position-factory#getpositions) on the `PositionFactory` contract to get the address of the `Position` contract you just deployed.
+
+```bash
+cast call $POSITION_FACTORY "getPositions(address)(address[])" $ACCOUNT --rpc-url $RPC
+```
+
+To make the commands below more legible, the contract's address can be stored as an environment variable.
+
+```bash
+export POSITION=0xf7502e17359A0e0C41128e50a7110766BE849BDE
+```
+
+## Add to a Position
+
+Now that you have a `Position` contract for shorting WETH using USDC as collateral, you can add to the position by calling `add` on your newly deployed `Position` contract. However, your `Position` contract must first be approved to spend your USDC.
+
+```bash
+cast send $USDC "approve(address,uint256)" $POSITION 10000000 --rpc-url $RPC --private-key $PK
+```
+
+Once approved, you can call [`add`](/technical-docs/contracts/position#add) on your `Position` contract. In the command below, 10 USDC are being added as collateral, WETH will be borrowed at a 70% LTV, the minimum swap amount out will be 0, the Uniswap pool fee tier is 0.05%, and since we're not using a frontend, the client is `0x0000000000000000000000000000000000000000`.
+
+```bash
+cast send $POSITION "add(uint256,uint256,uint256,uint24,address)" 10000000 $LTV 0 $UNI_POOL_FEE $CLIENT --rpc-url $RPC --private-key $PK
+```
+
+## Add Leverage to a Position
+
+To add leverage to a Position, the [`addLeverage`](/technical-docs/contracts/position#addleverage) function on the `Position` contract can be called. Leverage is added by borrowing more of the debt token (WETH), swapping it for the base token (USDC), and supplying that as collateral to Aave.
+
+First, the maximum amount of WETH to borrow must be calculated by calling `getUserAccountData` on [Aave's Pool contract](https://docs.aave.com/developers/core-contracts/pool#getuseraccountdata) and `getAssetPrice` on [Aave's Oracle contract](https://docs.aave.com/developers/core-contracts/aaveoracle#getassetprice).
+
+Here are the Foundry commands and pseudocode describing how to calculate the max borrow amount:
+
+```bash
+cast call $AAVE_POOL "getUserAccountData(address)(uint256,uint256,uint256,uint256,uint256,uint256)" $POSITION --rpc-url $RPC
+```
+
+```bash
+cast call $AAVE_ORACLE "getAssetPrice(address)" $WETH --rpc-url $RPC
+```
+
+```solidity
+(cTotalUSD, dTotalUSD,,, ltv,) = AavePool.getUserAccountData(POSITION);
+dTokenPriceUSD = AaveOracle.getAssetPrice(WETH)
+dMaxUSD = (cTotalUSD * ltv) / 1e4;
+maxBorrowUSD = dMaxUSD - dTotalUSD;
+maxBorrowAmt = (maxBorrowUSD * 10 ** (WETH_DECIMALS)) / dTokenPriceUSD;
+```
+
+Now, the maximum for `BORROW_AMT` below is `maxBorrowAmt`, and `addLeverage` can now be called such that `BORROW_AMT <= maxBorrowAmt`.
+
+```bash
+cast send $POSITION "addLeverage(uint256,uint256,uint24,address)" $BORROW_AMT 0 $UNI_POOL_FEE $CLIENT --rpc-url $RPC --private-key $PK
+```
+
+## Position Reduction
+
+To reduce the size of a position, the [`reduce`](/technical-docs/contracts/position#reduce) function on the `Position` contract can be called.
+
+```bash
+cast send $POSITION "reduce(uint24,bool,uint256,uint256,uint256)" $UNI_POOL_FEE false 0 1000 0 --rpc-url $RPC --private-key $PK
+```
